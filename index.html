@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zonauang Lead Monitor</title>
+<style>
+:root{--ink:#57364f;--muted:#8d7587;--pink:#e94d9c;--pink2:#f7cce4;--lav:#ded7f5;--paper:#fff8fc;--line:#edc1dc;--shadow:0 12px 35px #9d70941c}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,ui-rounded,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:linear-gradient(135deg,#ded8f5 0%,#fbe0ed 54%,#fff1f8 100%);min-height:100vh}
+header{padding:25px clamp(16px,4vw,42px) 15px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px}.logo{width:48px;height:48px;border-radius:17px;background:#ffe7a7;display:grid;place-items:center;font-size:25px;color:#9c6c30}.brand h1{font-size:clamp(22px,3vw,32px);margin:0;font-weight:850;letter-spacing:-.7px}.brand p{margin:3px 0 0;color:var(--muted);font-size:13px}
+button,input,select,textarea{font:inherit}button{cursor:pointer;border:1px solid var(--line);background:#fff8fc;color:var(--ink);border-radius:14px;padding:11px 15px;font-weight:700;transition:.15s}button:hover{transform:translateY(-1px);box-shadow:var(--shadow)}button.primary{background:linear-gradient(135deg,#f478b9,#e83893);border-color:#e94d9c;color:white}button.soft{background:#fff4fa}.wrap{max-width:1240px;margin:auto;padding:0 clamp(14px,3vw,34px) 40px}
+.notice{border:1px solid #e7c4e5;background:#ffffffb8;border-radius:18px;padding:14px 16px;margin:8px 0 20px;font-size:13px;line-height:1.55;color:#765d73}.notice strong{color:#9d2f75}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:18px}.stat,.panel,.lead{background:#fff9fded;border:1px solid var(--line);border-radius:23px;box-shadow:var(--shadow)}.stat{padding:16px 18px}.stat span{display:block;color:var(--muted);font-size:13px}.stat b{display:block;font-size:27px;margin-top:4px}
+.tabs{display:flex;gap:8px;overflow:auto;padding:2px 0 13px;margin-bottom:15px}.tab{white-space:nowrap;border-radius:999px;padding:10px 16px}.tab.active{background:#fce1f0;color:#c22b7b;border-color:#ef9dcc}
+.toolbar{display:grid;grid-template-columns:minmax(180px,1fr) 200px 160px;gap:10px;margin-bottom:18px}.field{width:100%;border:1px solid var(--line);background:#fff9fd;border-radius:15px;padding:13px 14px;color:var(--ink);outline:none}.field:focus,textarea:focus{border-color:var(--pink);box-shadow:0 0 0 3px #f9c9e4}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:18px;align-items:start}.leads{display:grid;gap:14px}.lead{padding:20px}.leadtop{display:flex;align-items:center;gap:11px}.avatar{width:43px;height:43px;border-radius:50%;display:grid;place-items:center;background:#fde6ed;color:#9f376d;font-weight:800;flex-shrink:0}.person{min-width:0;flex:1}.person b{display:block;font-size:16px}.person small{color:var(--muted)}.pill{font-size:12px;background:#fce5f2;color:#b52b78;border-radius:999px;padding:6px 10px;white-space:nowrap}.tags{display:flex;flex-wrap:wrap;gap:7px;margin:15px 0}.tag{font-size:12px;padding:6px 10px;border:1px solid #eab6d4;border-radius:10px;background:#fff4fa}.post{font-size:18px;line-height:1.6;margin:12px 0 9px;overflow-wrap:anywhere}.match{color:var(--muted);font-size:13px}.actions{display:flex;flex-wrap:wrap;gap:9px;border-top:1px solid #f0d9e7;padding-top:14px;margin-top:14px}.actions button{font-size:13px}.panel{padding:18px;position:sticky;top:14px}.panel h2{font-size:19px;margin:0 0 6px}.panel p{font-size:13px;line-height:1.55;color:var(--muted);margin:0 0 13px}.panel label{display:block;font-size:13px;font-weight:750;margin:14px 0 7px}textarea{resize:vertical;width:100%;min-height:110px;padding:12px;border:1px solid var(--line);border-radius:14px;background:#fff9fd;color:var(--ink);line-height:1.5;outline:none}.panel .full{width:100%;margin-top:9px}.hint{font-size:12px;color:var(--muted);line-height:1.5;margin-top:12px}.empty{padding:35px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:20px;background:#fff8fcaa}.footer{font-size:12px;color:var(--muted);text-align:center;margin-top:26px}
+@media(max-width:850px){.layout{grid-template-columns:1fr}.panel{position:static}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.toolbar{grid-template-columns:1fr 1fr}.toolbar input{grid-column:1/-1}}
+@media(max-width:480px){header{align-items:flex-start}.toolbar{grid-template-columns:1fr}.toolbar input{grid-column:auto}.lead{padding:16px}.post{font-size:16px}.brand p{max-width:230px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><div class="logo">#</div><div><h1>Zonauang Lead Monitor</h1><p>Pantau percakapan publik · susun balasan · kirim manual lewat X</p></div></div>
+  <button class="primary" id="searchX">↗ Cari di X</button>
+</header>
+<main class="wrap">
+  <div class="notice"><strong>Mode gratis:</strong> versi ini tidak memakai API berbayar dan tidak mengambil tweet secara otomatis. Tombol pencarian membuka hasil pencarian X; kamu bisa menempelkan tautan tweet ke panel balasan untuk membuat tautan reply langsung. Contoh tweet di bawah hanya data demo.</div>
+  <section class="stats">
+    <div class="stat"><span>Tweet demo</span><b id="countAll">6</b></div>
+    <div class="stat"><span>Produk dipantau</span><b id="countProducts">20+</b></div>
+    <div class="stat"><span>Template tersimpan</span><b id="countTemplates">3</b></div>
+    <div class="stat"><span>Mode</span><b style="font-size:19px">Gratis</b></div>
+  </section>
+  <nav class="tabs" id="tabs">
+    <button class="tab active" data-filter="Semua">Semua</button><button class="tab" data-filter="Baru">Baru</button><button class="tab" data-filter="WTB">WTB / Cari</button><button class="tab" data-filter="WTS">WTS / Jual</button><button class="tab" data-filter="Ditindaklanjuti">Ditindaklanjuti</button>
+  </nav>
+  <section class="toolbar">
+    <input class="field" id="search" placeholder="⌕ Cari nama, isi tweet, hashtag…">
+    <select class="field" id="product"><option value="">Semua produk</option></select>
+    <select class="field" id="intent"><option value="">Semua kebutuhan</option><option>WTB / Cari</option><option>WTS / Jual</option></select>
+  </section>
+  <div class="layout">
+    <section class="leads" id="leads"></section>
+    <aside class="panel">
+      <h2>Template balasan</h2><p>Atur pesan promosi supaya tinggal disalin ke kolom reply X. Hindari klaim yang tidak benar dan pastikan stok/harga sesuai.</p>
+      <label for="templatePick">Pilih template</label>
+      <select class="field" id="templatePick">
+        <option value="0">Tanya kebutuhan</option><option value="1">Info produk</option><option value="2">Template custom</option>
+      </select>
+      <label for="templateText">Isi balasan</label>
+      <textarea id="templateText">Hai kak, masih cari Netflix? Aku bisa bantu info paket yang tersedia yaa ♡ Kalau berkenan, boleh DM untuk detail harga dan durasinya.</textarea>
+      <button class="full" id="saveTemplate">Simpan template</button>
+      <label for="tweetUrl">Tautan tweet yang mau dibalas</label>
+      <input class="field" id="tweetUrl" placeholder="https://x.com/akun/status/123456789">
+      <button class="primary full" id="replyDirect">↗ Buka reply di X</button>
+      <button class="soft full" id="copyTemplate">Salin teks balasan</button>
+      <div class="hint">Alur: cari tweet di X → salin URL tweet → tempel di sini → buka reply → cek teks dan tujuan → kirim sendiri di X. Web tidak mengirim balasan otomatis.</div>
+    </aside>
+  </div>
+  <div class="footer">Zonauang Lead Monitor · prototipe front-end · data contoh tidak berasal dari X.</div>
+</main>
+<script>
+const products=['Netflix','Canva','CapCut','Spotify','ChatGPT','YouTube','Prime Video','Vidio','Disney+','Viu','iQIYI','WeTV','Youku','Viki','Bstation','DeepL','HBO','GagaOOLala','Loklok','Dazz Cam','MangoTV','VPN','Apple Music','ReelShort','AM','MS365','WPS'];
+const demo=[
+ {name:'pika ✿',user:'@pixypaw',product:'Netflix',intent:'WTB / Cari',status:'Baru',text:'butuh cepet netflix 3 hari #zonauang',time:'Contoh data',match:'butuh · #zonauang'},
+ {name:'aku cinta ohyul',user:'@ldniellea',product:'Netflix',intent:'WTB / Cari',status:'Baru',text:'hii ini ciuss ga ada yg maw netflix gratis?? ayo hii masii ada 2 slottt lagii, no scam yh',time:'Contoh data',match:'ada · netflix'},
+ {name:'nana',user:'@nanadaily',product:'Canva',intent:'WTB / Cari',status:'Baru',text:'wtb canva pro, ada yang jual bulanan?',time:'Contoh data',match:'wtb · canva pro'},
+ {name:'dimas',user:'@dimasspace',product:'Spotify',intent:'WTS / Jual',status:'Baru',text:'wts spotify premium family slot, info dm',time:'Contoh data',match:'wts · spotify premium'},
+ {name:'rere',user:'@rerecloud',product:'Viu',intent:'WTB / Cari',status:'Ditindaklanjuti',text:'ada yang jual viu premium? cari yang aman dan terpercaya',time:'Contoh data',match:'ada yang jual · viu'},
+ {name:'alya',user:'@alyarchive',product:'ChatGPT',intent:'WTB / Cari',status:'Baru',text:'need chatgpt plus, wtb yang ready hari ini',time:'Contoh data',match:'need · wtb'}
+];
+const templates=[
+ 'Hai kak, masih cari {produk}? Aku bisa bantu info paket yang tersedia yaa ♡ Kalau berkenan, boleh DM untuk detail harga dan durasinya.',
+ 'Hai kak! Untuk {produk} ada opsi yang bisa aku jelaskan. Boleh DM ya kak, nanti aku kirim detail paket, harga, dan durasinya ♡',
+ 'Hai kak, aku ada info {produk}. Kalau masih membutuhkan, boleh kabari yaa ♡ Detail dan ketentuan akan aku jelaskan dulu.'
+];
+let selected='Semua',savedTemplates=[...templates];
+const $=id=>document.getElementById(id);
+products.forEach(p=>{let o=document.createElement('option');o.value=p;o.textContent=p;$('product').appendChild(o)});
+function render(){
+ const q=$('search').value.toLowerCase(),prod=$('product').value,int=$('intent').value;
+ let list=demo.filter(x=>(selected==='Semua'||selected==='Baru'&&x.status==='Baru'||selected===x.intent||selected==='Ditindaklanjuti'&&x.status==='Ditindaklanjuti')&&(!prod||x.product===prod)&&(!int||x.intent===int)&&(!q||(x.name+' '+x.user+' '+x.text+' '+x.product+' #zonauang').toLowerCase().includes(q)));
+ $('leads').innerHTML='';
+ if(!list.length){$('leads').innerHTML='<div class="empty">Tidak ada data demo yang cocok. Untuk tweet asli, gunakan tombol “Cari di X”.</div>';return}
+ list.forEach((x,i)=>{
+  const card=document.createElement('article');card.className='lead';
+  card.innerHTML=`<div class="leadtop"><div class="avatar">${x.name.slice(0,1).toUpperCase()}</div><div class="person"><b>${esc(x.name)}</b><small>${esc(x.user)} · ${x.time}</small></div><span class="pill">${esc(x.status)}</span></div>
+  <div class="tags"><span class="tag">${esc(x.product)}</span><span class="tag">${esc(x.intent)}</span><span class="tag">Feed publik · demo</span></div>
+  <div class="post">${esc(x.text)}</div><div class="match">✓ Cocok: ${esc(x.match)}</div>
+  <div class="actions"><button class="primary" data-reply="${i}">↗ Siapkan balasan</button><button data-search="${i}">Buka pencarian X ↗</button><button data-follow="${i}">${x.status==='Ditindaklanjuti'?'Sudah ditindaklanjuti':'Tandai ditindaklanjuti'}</button></div>`;
+  $('leads').appendChild(card);
+ });
+ document.querySelectorAll('[data-reply]').forEach(b=>b.onclick=()=>{let x=list[+b.dataset.reply];$('product').value=x.product;$('templateText').value=templates[0].replaceAll('{produk}',x.product);$('tweetUrl').focus();window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})});
+ document.querySelectorAll('[data-search]').forEach(b=>b.onclick=()=>openSearch(list[+b.dataset.search].product));
+ document.querySelectorAll('[data-follow]').forEach(b=>b.onclick=()=>{let x=list[+b.dataset.follow];x.status=x.status==='Ditindaklanjuti'?'Baru':'Ditindaklanjuti';render()});
+}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function openSearch(product=''){const query=encodeURIComponent(`#zonauang ${product} (wtb OR cari OR nyari OR butuh OR "mau beli" OR "ada yang jual" OR "want to buy" OR need)`);window.open('https://x.com/search?q='+query+'&src=typed_query&f=live','_blank','noopener')}
+$('searchX').onclick=()=>openSearch($('product').value);
+$('search').oninput=render;$('product').onchange=render;$('intent').onchange=render;
+$('tabs').querySelectorAll('button').forEach(b=>b.onclick=()=>{selected=b.dataset.filter;$('tabs').querySelectorAll('button').forEach(t=>t.classList.toggle('active',t===b));render()});
+$('templatePick').onchange=()=>{$('templateText').value=savedTemplates[+$('templatePick').value]||''};
+$('saveTemplate').onclick=()=>{savedTemplates[+$('templatePick').value]=$('templateText').value;$('countTemplates').textContent=savedTemplates.length;alert('Template disimpan untuk sesi ini. Untuk versi produksi, simpan ke database atau localStorage.')};
+$('copyTemplate').onclick=async()=>{try{await navigator.clipboard.writeText($('templateText').value);alert('Teks disalin.')}catch(e){$('templateText').select();alert('Pilih teks lalu salin secara manual.')}};
+$('replyDirect').onclick=()=>{const url=$('tweetUrl').value.trim();const match=url.match(/(?:x\.com|twitter\.com)\/[^/]+\/status\/(\d+)/i);if(!match){alert('Masukkan tautan tweet X yang valid, contohnya https://x.com/nama/status/123456789');return}const id=match[1];const text=$('templateText').value;window.open('https://x.com/intent/tweet?in_reply_to='+id+'&text='+encodeURIComponent(text),'_blank','noopener')};
+render();
+</script>
+</body>
+</html>
